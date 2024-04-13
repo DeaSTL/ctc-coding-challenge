@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:15-alpine3.18
+    env_file:
+      - path: ./db.env
+        required: true
+
+  app:
+    build:
+      context: ./app
+    env_file:
+      - path: ./db.env
+        required: true
+    ports:
+      - 3000:3000
+    develop:
+      watch:
+        - action: rebuild
+          path: ./app
+          target: /app
+    depends_on:
+      - db
+  # if I need a db ui
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8086:8080
+
