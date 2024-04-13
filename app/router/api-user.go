@@ -2,11 +2,20 @@ package router
 
 import (
 	"encoding/json"
-	"log"
+	"regexp"
 
 	"github.com/gofiber/fiber/v2"
+	"jhart.dev/ctc-coding-challenge-app/models"
 	"jhart.dev/ctc-coding-challenge-app/services"
 )
+
+const _EXP_EMAIL = `^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$` 
+
+
+type registerForm struct {
+  Email string `json:"email"`
+  Password string `json:"pasword"`
+}
 
 func sendMessage(c *fiber.Ctx,msg APIMessage) error{
   messageStr , err := json.Marshal(msg)
@@ -26,43 +35,91 @@ func sendMessage(c *fiber.Ctx,msg APIMessage) error{
 func UserAPI(sp *services.Provider) func(fiber.Router){
 
   return func(r fiber.Router){
-    r.Get("/check-email",func(c *fiber.Ctx) error{
-      emailValue := c.Query("value","")
-      if len(emailValue) < 1{
-        err := sendMessage(c,APIMessage{
+    r.Post("/register",func(c *fiber.Ctx) error{
+      body := registerForm{}
+
+      if err := c.BodyParser(&body); err != nil {
+        return c.JSON(APIMessage{
         	Status:  STATUS_MISSING_VALUES,
-        	Message: "value not set",
+        	Message: "The form submitted has invalid data",
         	Data:    nil,
         })
+      }
 
-        if err != nil {
-          return err
-        }
+      emailExp,err := regexp.Compile(_EXP_EMAIL)
+
+      if err != nil {
         return err
       }
-      user,err := sp.GetUserByEmail(emailValue)
+
+      if !emailExp.MatchString(body.Email) {
+        return c.JSON(APIMessage{
+        	Status:  STATUS_FAILURE,
+        	Message: "Email format is invalid",
+        	Data:    nil,
+        }) 
+      }
 
 
-      log.Printf("user: %+v", user)
-
-
+      user,err := sp.GetUserByEmail(body.Email)
 
       if err == nil {
-        err := sendMessage(c,APIMessage{
+        return c.JSON(APIMessage{
           Status: STATUS_FAILURE,
           Message: "User with that email already exists",
           Data: nil,
         })
-        return err
       }
 
-      sendMessage(c,APIMessage{
+      user, err = sp.CreateUser(models.User{
+        Email:body.Email,
+        Password: body.Password,
+      })
+
+      return c.JSON(APIMessage{
       	Status:  STATUS_SUCCESS,
       	Message: "success",
       	Data: user,
       })
+    })
+    r.Get("/check-email",func(c *fiber.Ctx) error{
+      emailValue := c.Query("value","")
+      if len(emailValue) < 1{
+        return c.JSON(APIMessage{
+        	Status:  STATUS_MISSING_VALUES,
+        	Message: "value not set",
+        	Data:    nil,
+        })
+      }
 
-      return nil 
+
+      emailExp,err := regexp.Compile(_EXP_EMAIL)
+
+      if err != nil {
+        return err
+      }
+
+      if !emailExp.MatchString(emailValue) {
+        return c.JSON(APIMessage{
+        	Status:  STATUS_FAILURE,
+        	Message: "Invalid email format",
+        	Data:    nil,
+        })
+      }
+      user,err := sp.GetUserByEmail(emailValue)
+
+      if err == nil {
+        return c.JSON(APIMessage{
+          Status: STATUS_FAILURE,
+          Message: "User with that email already exists",
+          Data: nil,
+        })
+      }
+      return c.JSON(APIMessage{
+      	Status:  STATUS_SUCCESS,
+      	Message: "success",
+      	Data: user,
+      })
     })
 
   }

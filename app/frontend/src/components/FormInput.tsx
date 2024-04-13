@@ -4,13 +4,19 @@ type Props = {
   id: string;
   type: string;
   label: string;
+  set(value:string):any;
   validate(value:string) : Promise<string>
   placeholder?: string | ""
 }
 
-export default function FormInput({type,validate,placeholder,id,label}: Props) {
+export default function FormInput({type,validate,placeholder,id,label,set}: Props) {
   const [error, setError] = useState("")
   const [input, setInput] = useState("")
+  
+  useEffect(() => {
+    set(input) 
+  }, [input])
+
   function RenderError({errorMessage}:any){
     if(errorMessage != ""){
       return <div className="invalid-feedback">
