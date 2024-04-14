@@ -19,6 +19,6 @@ RUN mkdir bin
 
 RUN go build -o ./bin/ main.go
 
-RUN ls
+# If this was a real deployment we'd create a second image including just the binary and static files
 
 ENTRYPOINT ./bin/main

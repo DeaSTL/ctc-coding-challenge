@@ -5,6 +5,7 @@ import (
 	"errors"
 	"log"
 	"os"
+	"time"
 
 	"github.com/jackc/pgx/v5"
 )
@@ -37,10 +38,19 @@ func NewDBConnection() (*Queries,error) {
   }
 
   connection, err := pgx.Connect(ctx,connectionString)
-
   if err != nil {
-    connectionError := errors.New("Could not connect to database")
-    return nil, errors.Join(err, connectionError)
+    log.Printf("Failed to connect to database we will re-attempt to establish a connection in 10s")
+    time.Sleep(time.Second * 10)
+    for i := 0; i < 4; i++ {
+      log.Printf("re-attempt to connect to database attempt number %d/4 error: %+v", i,err.Error())
+      connection, err = pgx.Connect(ctx,connectionString) 
+      if err == nil {
+        log.Println("Successfully connected to database")
+        break
+      }
+      time.Sleep(time.Second * 10)
+      log.Printf("Failed to connect to database %+v", err.Error())
+    }
   }
   queries := New(connection)
   

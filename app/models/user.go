@@ -2,9 +2,9 @@ package models
 
 
 type User struct {
-  ID int64
-  Email string
-  Password string //bcrypt+salt
+  ID int64 `json:"id"`
+  Email string `json:"email"`
+  Password string `json:"password"` //bcrypt+salt
 }
 
 func (u *User) MakePublic()  {

@@ -17,3 +17,33 @@
 }
 
 
+.notification-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 10;
+	text-align: center;
+}
+
+.notification {
+  color: white;
+  background-color: rgb(88, 95, 99,0.75);
+  padding: 4px;
+  border-radius: 4px;
+}
+.notification.error {
+  color: white;
+  background-color: rgb(255, 43, 43,0.75);
+}
+.notification.success {
+  color: white;
+  background-color: rgb(26, 161, 121,0.75); 
+}
+
+.invisible {
+  display: none;
+  width: 0px;
+  height: 0px;
+}
+

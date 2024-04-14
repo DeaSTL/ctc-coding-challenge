@@ -2,11 +2,14 @@ import axios from "axios"
 
 import {  useState } from "react"
 import FormInput from "../FormInput"
+import { APIMessage } from "../../types"
 
-type Props = {}
+type Props = {
+  visible:boolean;
+}
 
 
-export default function Register({}: Props) {
+export default function Register({visible}: Props) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [__, setRepeatPassword] = useState("")
@@ -52,12 +55,12 @@ export default function Register({}: Props) {
   }
   async function checkPassword(value:string) : Promise<string> {
     return new Promise((resolve, _) => { 
-      if(value.length == 0 || value.length > 7){
+      if(value.length == 0 || value.length > 11){
         resolve("")
         setPasswordValid(true)
       }else {
         setPasswordValid(false)
-        resolve("Your password must be at least 8 characters long")
+        resolve("Your password must be at least 12 characters long")
       }
     })
   }
@@ -79,7 +82,7 @@ export default function Register({}: Props) {
 
 
   return (
-    <div className="slide-in needs-validation">
+    <div className={`slide-in needs-validation ${!visible ? "invisible" : ""}`} id="registrationForm">
       <div className="mb-3">
         <FormInput id={"emailInput"} type={"email"} label={"Email"} validate={checkEmail} set={setEmail}/>
       </div>

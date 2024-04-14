@@ -3,13 +3,14 @@ import {  useEffect, useState } from "react"
 type Props = {
   id: string;
   type: string;
+  max?: number;
   label: string;
   set(value:string):any;
   validate(value:string) : Promise<string>
   placeholder?: string | ""
 }
 
-export default function FormInput({type,validate,placeholder,id,label,set}: Props) {
+export default function FormInput({type,validate,placeholder,id,label,set,max = 24}: Props) {
   const [error, setError] = useState("")
   const [input, setInput] = useState("")
   
@@ -52,6 +53,7 @@ export default function FormInput({type,validate,placeholder,id,label,set}: Prop
         className={`form-control ${error != "" ? "is-invalid" : ""}`}
         placeholder={placeholder}
         onChange={(e)=>{setInput(e.target.value)}}
+        max={max}
         >
       </input>
       <RenderError errorMessage={error}/> 

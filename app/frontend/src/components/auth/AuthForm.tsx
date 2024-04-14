@@ -2,30 +2,16 @@ import { useEffect, useState } from 'react'
 import Login from './Login'
 import Register from './Register'
 
-type Props = {}
+type Props = {
+  successfulLogin():void
+}
 
-export default function AuthForm({}: Props) {
+export default function AuthForm({successfulLogin}: Props) {
   const [selectedTab, setSelectedTab] = useState("login")
-
-  useEffect(()=>{
-    console.log("set selected changed",selectedTab);
-    
-  },[selectedTab])
-  // big no no, I know ....
-  function TabPageControl(){
-    switch (selectedTab) {
-      case "login":
-        return <Login/>
-      case "register":
-        return <Register/>
-      default:
-        return ``
-    }
-  }
 
 
   return (
-    <div>
+    <div className="mt-4">
       <div className="card p-4">
         <ul className="nav nav-underline"> 
           <li className="nav-item"> 
@@ -45,7 +31,8 @@ export default function AuthForm({}: Props) {
             >Register</a>
           </li>
         </ul>
-        <TabPageControl/>
+        <Login successfulLogin={successfulLogin} visible={selectedTab == "login"}/>
+        <Register visible={selectedTab == "register"}/>
       </div>
     </div>
   )

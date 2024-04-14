@@ -11,6 +11,8 @@ services:
     env_file:
       - path: ./db.env
         required: true
+      - path: ./app.env
+        required: true
     ports:
       - 3000:3000
     develop:
