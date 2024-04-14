@@ -41,3 +41,4 @@ docker-compose up
 ```
 In your browser enter `http://localhost:3000`
 
+![2024-04-14_02-13](https://github.com/DeaSTL/ctc-coding-challenge/assets/19532324/15d08e13-d735-4f5e-9ffa-df8280528cdd)
