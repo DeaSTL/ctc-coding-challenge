@@ -15,7 +15,7 @@ import (
 
 type registerForm struct {
 	Email    string `json:"email"`
-	Password string `json:"pasword"`
+	Password string `json:"password"`
 }
 
 type loginForm struct {
@@ -156,7 +156,7 @@ func UserAPI(sp *services.Provider) func(fiber.Router) {
 
 			return c.JSON(APIMessage{
 				Status:  STATUS_SUCCESS,
-				Message: "success",
+				Message: "You have successfully registered",
 				Data:    user,
 			})
 		})

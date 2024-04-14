@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"regexp"
 
 	"golang.org/x/crypto/bcrypt"
@@ -74,8 +75,9 @@ func (s *Provider) CreateUser(newUser models.User) (models.User, error)  {
   if emailCheck != nil {
     return models.User{},emailCheck
   }
-
+  log.Printf("New user: %+v", newUser)
   hashedPassword, err := hashPassword(newUser.Password)
+  log.Printf("New hashed password: %+v", hashedPassword)
   if err != nil {
     return models.User{},errors.Join(err,errors.New("Error hashing password"))
   }

@@ -3,6 +3,7 @@ import axios from "axios"
 import {  useState } from "react"
 import FormInput from "../FormInput"
 import { APIMessage } from "../../types"
+import { useNotification } from "../Notifications"
 
 type Props = {
   visible:boolean;
@@ -18,10 +19,19 @@ export default function Register({visible}: Props) {
   const [passwordValid, setPasswordValid] = useState(false)
   const [passwordRepeatValid, setPasswordRepeatValid] = useState(false)
 
+  const sendNotification = useNotification()
+
 
   function submitForm(){
     axios.post(`/api/user/register`,{email,password}).then(res=>{
-      console.log(res);
+      if(res.status == 200){
+        var data = res.data as APIMessage
+        if(data.status == "success") {
+          sendNotification(data.message,"success")    
+        }else{
+          sendNotification(data.message,"error")    
+        }
+      }
     })
   }
 
