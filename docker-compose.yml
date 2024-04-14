@@ -23,9 +23,9 @@ services:
     depends_on:
       - db
   # if I need a db ui
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8086:8080
+  #adminer:
+  #  image: adminer
+  #  restart: always
+  #  ports:
+  #    - 8086:8080
 

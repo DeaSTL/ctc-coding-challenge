@@ -11,7 +11,7 @@ import (
 
 
 func main()  {
-  log.Printf("Hello World")
+  log.Printf("Attempting to start go server")
 
 
   queries,err := db.NewDBConnection()
@@ -29,14 +29,6 @@ func main()  {
   if err != nil {
     log.Print(errors.Join(err,errors.New("Failed to seed database")).Error())
   }
-
-  users, err := serviceProvider.GetUsers()
-
-  if err != nil {
-    log.Fatal(err)
-  }
-  log.Printf("user: %+v", users)
-  
 
   log.Fatal(app.Listen(":3000"))
 }

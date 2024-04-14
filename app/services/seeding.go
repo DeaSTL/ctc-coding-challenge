@@ -7,7 +7,7 @@ import (
 	"jhart.dev/ctc-coding-challenge-app/models"
 )
 
-
+// Seeds test users
 func (p *Provider) SeedDB() error{
   mockUsers := []models.User{
     {

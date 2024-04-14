@@ -19,9 +19,9 @@ type APIMessage struct {
 
 func NewApp(sp *services.Provider) *fiber.App {
   app := fiber.New()
-
+  // attaches the react frontend to the root
   app.Static("/","frontend/dist")
-
+  // attaches the user api
   app.Route("/api/user/",UserAPI(sp))
 
   return app

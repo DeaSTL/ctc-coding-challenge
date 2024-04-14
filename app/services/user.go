@@ -13,7 +13,7 @@ import (
 
 const _EXP_EMAIL = `^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$` 
 
-
+// Error types
 type UserExistsError struct{
   Email string
 }
@@ -46,6 +46,7 @@ func (ue UserInvalidPasswordError) Error() string {
   return fmt.Sprintf("User %v provided a invalid password",ue.Email)
 }
 
+// Helpers
 func dbUserToModel(user db.User) models.User {
   return models.User{
     ID: user.ID,
@@ -63,6 +64,7 @@ func checkPassword(password string, hash string) bool {
   err := bcrypt.CompareHashAndPassword([]byte(hash),[]byte(password))
   return err == nil
 }
+
 //CRUD operations
 func (s *Provider) CreateUser(newUser models.User) (models.User, error)  {
   
